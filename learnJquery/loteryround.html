@@ -1,0 +1,98 @@
+<html><head>
+<title>圆盘抽奖</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<style>
+.panel{width:326px; height:400px;margin:0 auto;position:relative;overflow:hidden;
+	background-image:url(https://udata.youban.com/webimg/weixin/180420appFans/fans_lottery_bg.png);background-size:cover;
+}
+.panel .panel-face{width:284px;height:284px;position:absolute;left:21px;top: 56px;
+	background-image:url(https://udata.youban.com/webimg/weixin/180420appFans/fans_lottery_box.png);background-size:cover;
+}
+.panel .panel-btn{width:75px;height:109px;position:absolute;top:126px;left:126px;
+	background-image:url(https://udata.youban.com/webimg/weixin/180420appFans/fans_lottery_pointer.png);background-size:cover;
+	transition:transform 0.5s;-webkit-transition:-webkit-transform 0.5s;
+}
+.panel.playing .panel-btn{-webkit-transform:scale(0.9);transform:scale(0.9);}
+</style>
+</head>
+<body>
+
+<div id="ltpanel" class="panel">
+	<div class="panel-face">
+	</div>
+	<div class="panel-btn">
+	</div>
+</div>
+
+<script src="js/jquery-3.2.1.js"></script>
+<!--<script src="js/loteryround.js"></script>-->
+<script type="text/javascript">
+	;(function($,window,document,undefined){
+		function PanelLotery(options) { 
+			var defaults={
+				length:8,//必填
+				el:'',//必填
+				duration:5000,//转盘时间
+				round:0,//转盘次数
+				playing:false//是否正在转
+			}
+			options.el=$(options.el);
+			this.opt=$.extend({},defaults, options); 
+			this._init()//初始化
+		}
+		PanelLotery.prototype = {
+			_init:function(){ 
+				if (this.opt.el.length==0)return ;
+				this.face = $(".panel-face", this.opt.el);
+				this.face.css({ "-webkit-transition": "-webkit-transform " + this.opt.duration + "ms",
+				transition: "transform " + this.opt.duration + "ms"});
+			},
+			playto:function(n, callback) {
+				var that = this; 
+				if (this.opt.el.length==0)return ;
+				if("number" != typeof n) return void console.log("n必须是一个数字");
+				if(n < 1 || n > this.opt.length) return void console.log("n的区间：1-" + this.length);
+				if(!this.opt.playing) { 
+					this.opt.playing = true,
+					this.opt.el.addClass("playing"),
+					this.opt.round++; //抽奖次数
+					var angle=(this.opt.length-n+0.5) * 360 / this.opt.length+3*360*this.opt.round;
+					console.log(angle,(this.opt.length-n)*360/this.opt.length,0.5*360/this.opt.length,3*360*this.opt.round)
+					this.face.css({ "-webkit-transform": "rotate(" + angle + "deg)", transform: "rotate(" + angle + "deg)" }), 
+					setTimeout(function() {
+						that.opt.playing = false,
+						that.opt.el.removeClass("playing"),
+						typeof callback == "function" && callback() 
+					}, that.opt.duration + 500)
+				}
+			}
+		}
+		window.PanelLotery=PanelLotery; 
+	})(jQuery, window, document)
+</script>
+<script>
+// 转盘初始化
+// 第一个参数是奖品的个数
+// 第二个是用来旋转的圆盘（指针不动）
+var panel=new PanelLotery({
+    length:8,
+    el:'#ltpanel'
+});
+
+$('.panel-btn').on('click', function(event) {
+    event.preventDefault();
+    if(panel.playing) return;
+    // 演示用，随机转到奖品n
+    // 初始的指针右侧开始
+    // 顺时针方向开始算
+    // 第一个奖品是n=1
+    var n=Math.floor(Math.random()*8)+1;
+    panel.playto(n,function(){
+        alert('抽中第'+n+'个');
+    });
+});
+
+</script>
+
+</body></html>

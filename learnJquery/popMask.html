@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>一句话弹窗</title>
+  		<script src="js/jquery-3.2.1.js"></script>
+	  	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+	</head>
+	<style>
+		/*.pop-mask{
+			display: none;
+			position: fixed;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 999;
+		}*/
+		/*.pop-mask-content{
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			padding: 5px 20px 7px;
+			color: #fff;
+			background: rgba(0,0,0,0.8);
+			border-radius: 5px;
+			transform: translate(-50%,-50%);
+			font-size: 16px;
+		}*/
+		.js_btn,.jq_btn{
+			padding: 10px 20px;
+			background: #555555;
+			color: #fff;
+			margin: 10px;
+			text-align: center;
+		}
+	</style>
+	<body>
+		<!--<div class='pop-mask'>
+			<div class="pop-mask-content">
+				一句话弹窗
+			</div>
+		</div>-->
+		<div class="js_btn" id='js_btn'>js一句话弹窗</div>
+		<div class="jq_btn">jquery一句话弹窗</div>
+	</body>
+	<script>
+		//js插件实现--一句话弹窗
+		;(function(win,doc){
+		    var defaults={
+		   		tipStr:'默认的一句话弹窗',
+		   		showTime:2000//显示时间。单位ms
+		    };
+		    //合并对象-相同属性后者替换前者-浅克隆
+		    function extend(def,opt){
+		    	var obj={};
+		    	for (var key in def){
+		    		obj[key]=def[key]
+		    	}
+		    	for (var key in opt){
+			        obj[key]=opt[key];
+			    }
+		    	return obj;
+		    }
+		    function popMask(){
+		    	this.options={};
+		    }
+		    popMask.prototype={
+			   	init:function(opt){
+			   		console.log('popMask init')
+			   		this.options=extend(defaults,opt);//参数对象合并赋值
+			   		if(!doc.querySelector('.pop-mask')){
+			   			var div_mask=doc.createElement('div');
+				   		div_mask.className='pop-mask';
+				   		div_mask.style.cssText='display: none;position: fixed;left: 0;top: 0;right: 0;bottom: 0';
+				   		var div_mask_content=doc.createElement('div')
+				   		div_mask_content.className='pop-mask-content';
+				   		div_mask_content.innerHTML=this.options.tipStr;
+				   		div_mask_content.style.cssText='position: absolute;left: 50%;top: 50%;padding: 5px 20px 7px;color: #fff;font-size: 16px;text-align:center;'
+				   		   +'background: rgba(0,0,0,0.8);border-radius: 5px;transform: translate(-50%,-50%);-webkit-transform: translate(-50%,-50%);';
+				   		div_mask_content.style.width=this.options.tipStr.length*16+'px'
+				   		div_mask.appendChild(div_mask_content);
+				   		var doc2=doc.documentElement||doc.body
+				   		doc2.appendChild(div_mask);
+			   		}else{
+			   			var $content=doc.querySelector('.pop-mask-content');
+			   			$content.style.width=this.options.tipStr.length*16+'px';
+			   			$content.innerHTML=this.options.tipStr;
+			   		}
+			   	},
+			   	show:function(opt){
+			   		var _this=this
+			   		_this.init(opt);
+			   		console.log('popMask show');
+			   		doc.querySelector('.pop-mask').style.display='block';
+			   		setTimeout(function(){
+			   			_this.hide();
+			   		},_this.options.showTime);
+			   	},
+			   	hide:function(){
+			   		console.log('popMask hide');
+			   		if(doc.querySelector('.pop-mask')){
+			   			doc.querySelector('.pop-mask').style.display='none';
+			   		}
+			   	}
+		    }
+		    this.popMask = new popMask();
+		}(window,document))
+		//jquery插件实现--一句话弹窗
+		;(function($, window, document,undefined){
+			var defaults={
+		   		tipStr:'默认的一句话弹窗',
+		   		showTime:2000//显示时间。单位ms
+		    };
+		    function popMask(){
+		    	this.options={};
+		    }
+		    popMask.prototype={
+			   	init:function(opt){
+			   		console.log('popMask init')
+			   		this.options=$.extend({},defaults,opt);//参数对象合并赋值
+			   		if($(".pop-mask").length==0){
+			   			$("body").append("<div class='pop-mask'><div class='pop-mask-content'></div></div>");
+			   			$(".pop-mask").css({
+			   				display: "none",position:"fixed",left: 0,top: 0,right: 0,bottom: 0
+			   			})
+			   			$(".pop-mask-content").css({
+			   				position: "absolute",left: "50%",top: "50%",padding:"5px 20px 7px",color: "#fff",fontSize: "16px",textAlign: "center",
+				   		   background: "rgba(0,0,0,0.8)",borderRadius: "5px",transform: "translate(-50%,-50%)",webkitTransform: "translate(-50%,-50%)"
+			   			})
+			   		}
+			   		$(".pop-mask-content").html(this.options.tipStr).width(this.options.tipStr.length*16);
+			   	},
+			   	show:function(opt){
+			   		var _this=this
+			   		_this.init(opt);
+			   		$(".pop-mask").show();
+			   		setTimeout(function(){
+			   			_this.hide();
+			   		},_this.options.showTime);
+			   	},
+			   	hide:function(){
+			   		console.log('popMask hide');
+			   		if($(".pop-mask").length>0){
+			   			$(".pop-mask").hide();
+			   		}
+			   	}
+		    }
+		    this.jqPopMask = new popMask();
+		}(jQuery, window, document))
+		
+		console.log(document.getElementById('js_btn'))
+		document.getElementById('js_btn').onclick=function(){
+			popMask.show({
+				tipStr:'来自js设置的弹窗提示',
+				showTime:2000
+			});
+		}
+		document.getElementsByClassName('jq_btn')[0].onclick=function(){
+			jqPopMask.show({
+				tipStr:'来自jquery设置的弹窗提示',
+				showTime:2000
+			});
+		}
+	</script>
+</html>

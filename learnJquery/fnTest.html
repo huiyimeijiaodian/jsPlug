@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>插件使用</title>
+		<script src="js/jquery-3.2.1.js"></script>
+	</head>
+	<body>
+		<script>
+//			;(function($, window, document,undefined){
+//				var myBanner=function(bannerEle,options){
+//					var default={};
+//					this.opt=$.extend({}, defaults, options||{});
+//				}
+//				myBanner.prototype={
+//				 	//对象方法
+//				}
+//				$.fn.myBanner=function(options){
+//			        new myBanner(this,options);
+//			    }
+//			})( jQuery, window, document)
+//			var options={autoplay:3000};
+//			$('.banner-box').myBanner(options);
+			
+			;(function($, window, document,undefined){
+				var myBanner=function(bannerEle,options){
+					var default={};
+//					this.opt=$.extend({}, defaults, options||{});
+					//原生js合并对象-相同属性后者替换前者-浅克隆
+				    function extend(def,opt){
+				    	var obj={};
+				    	for (var key in def){
+				    		obj[key]=def[key]
+				    	}
+				    	for (var key in opt){
+					        obj[key]=opt[key];
+					    }
+				    	return obj;
+				    }
+				    this.opt=extend(defaults, options||{});
+				}
+				myBanner.prototype={
+					//对象方法
+		            init:function(_bannerEle){
+		            	//初始化方法
+		            	//1.初始化html结构、css样式
+		            	//2.调用自动播放函数autoRun
+		            },
+		            prevRun:function(){
+		            	//上一页
+		            	//1.判断当前页下标activeIdx=activeIdx>0?activeIdx-1:length-1;
+		            	//2.banner距右移动一个位置，并将当前下标activeIdx--;
+		            },
+		            nextRun:function(){
+		            	//下一页
+		            	//1.判断当前页下标activeIdx=activeIdx<length-1?activeIdx+1:0;
+		            	//2.banner向左移动一个位置，并将当前下标activeIdx++;
+		            },
+		            autoRun:function(){
+		                //自动播放
+		                //1.定时器setInterval每个n秒调用下一页函数nextRun
+		            },
+		            stopRun:function(){
+		                //停止自动播放
+		                this.timer && window.clearInterval(this.timer);
+		            },
+		            bindEvent:function(){
+		                //绑定事件
+		                //1.监听触摸点开始的x1坐标和触摸结束点的x2坐标
+		                //2.比较两点横坐标距离判断是上一页or下一页
+						//3.停止自动滑动，调用上下页方法，结束后重新启动自动滑动
+		            }
+				}
+				window.myBanner = myBanner;//导出变量供外部调用
+			})( jQuery, window, document)
+			var options={autoplay:3000};
+			var myBanner=new myBanner('.banner-box',options)
+			
+			
+		</script>
+	</body>
+</html>

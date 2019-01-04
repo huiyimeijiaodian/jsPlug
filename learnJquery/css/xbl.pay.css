@@ -1,0 +1,28 @@
+/*龙币支付-弹窗*/
+*{margin: 0;padding: 0;}
+.Maskbg{width:100%;height:100%;left:0;bottom:-120%;position:fixed;background-color:rgba(0,0,0,0.2);z-index:120;}
+.MaskMain{position:absolute;bottom:0;left:0;background-color:#fff;width:100%;border-top:1px solid #ececec;}
+.MaskTitle{position:relative;height:40px;line-height:40px;text-align:center;border-bottom:1px solid #f7f7f7;}
+.MaskTitle h3{font-size: 18px;}
+.MaskTitle span{display:block;position:absolute;right:10px;width:30px;height:30px;margin:auto;top:0;bottom:0;border-radius:100%;z-index:3;}
+.MaskTitle span a{display:block;height:30px;width:30px;}
+.MaskTitle span::before{width:20px;height:2px;background-color:#333;content:"";display:block;transform:rotate(45deg);-webkit-transform:rotate(45deg);left:5px;top:14px;position:absolute;}
+.MaskTitle span::after{width:20px;height:2px;background-color:#333;content:"";display:block;transform:rotate(-45deg);-webkit-transform:rotate(-45deg);left:5px;top:14px;position:absolute;}
+.MaskPayInfo{height:45px;line-height:45px;border-bottom:1px solid #f7f7f7;font-size:16px;text-indent:1.2em;}
+.MaskPayInfo span{float:right;padding-right:20px;font-weight:bold;}
+.MaskPaylist ul{height:auto;overflow:hidden;}
+.MaskPaylist ul li{position:relative;height:50px;line-height:50px;padding:0 60px;border-bottom:1px solid #f7f7f7;font-size:14px;color:#555;}
+.MaskPaylist ul li.current::before{content:"";position:absolute;right:30px;top:23px;width:2px;height:8px;background-color:#09ab09;transform:rotate(-45deg);-webkit-transform:rotate(-45deg);}
+.MaskPaylist ul li.current::after{content:"";position:absolute;right:20px;top:14px;width:2px;height:20px;background-color:#09ab09;transform:rotate(45deg);-webkit-transform:rotate(45deg);}
+.sales{height:50px;line-height:50px;padding:0 1rem 0 1rem;border-bottom:1px solid #f7f7f7;font-size:14px;color:#555;position:relative;}
+.sales span{float:right;color:#f30;}
+.sales em{color:#999;}
+.MaskPaylist ul li i{position:absolute;left:15px;top:6px;width:38px;height:38px;margin-right:10px;background:url('http://udata.youban.com/webimg/weixin/apppayicon.png?ve985255');background-size:255px auto;}
+.pwxicon{background-position:0 0;}
+.pqricon{background-position:-43px -3px!important;border-radius:8px;width:32px!important;height:32px!important;top:9px!important;left:18px!important;}
+.plbicon{background-position:-80px 0!important;left:13px!important;}
+.psdicon{background-position:-130px -3px!important;border-radius:5px;left:19px!important;width:32px!important;height:32px!important;}
+.phwicon{background-position:-213px 0!important;left:13px!important;}
+.MaskPayBtn a{height:55px;margin:10px 7px;display:block;line-height:55px;background-color:#ff681e;text-align:center;color:#fff;font-size:18px;text-decoration:none;border-radius:5px;}
+.Azhe{position:fixed;width:100%;height:100%;z-index:999;top:0;left:0;background-color:rgba(0,0,0,0.6);}
+.Aertips{position:fixed;bottom:0;top:0;left:0;right:0;width:220px;height:55px;line-height:55px;margin:auto;background:#fff;border-radius:3px;z-index:999;text-align:center;color:#333;font-size:14px;}

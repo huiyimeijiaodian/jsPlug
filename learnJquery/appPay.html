@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>app支付</title>
+	</head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    
+    <script type="text/javascript" src="js/jquery-3.2.1.js" data-p="345"></script>
+    <style type="text/css">
+    	.buy_btn{
+    		position: fixed;left: 0;bottom: 0;
+    		height: 55px;
+		    line-height: 55px;
+		    font-size: 0;
+		    background-color: #fb5928;
+		    border-top: 1px solid #ececec;
+		    text-align: center;
+		    width: 100%;
+		    box-sizing: border-box;
+		    font-size: 16px;
+		    color: #fff;
+    	}
+    </style>
+	<link rel="stylesheet" type="text/css" href="css/xbl.pay.css"/>
+	<body>
+		<div class="body">
+			<div class="buy_btn">去购买</div>
+		</div>
+		
+	</body>
+	<script src="js/xbl.pay.js"></script>
+	<script>
+		var froms='self';//来源
+		var channelPay = 'nomal'; //nomal,huawei,oppo
+		var maxhwpay=0;//华为开启扫码
+		var ApplePay=1;//0是不可微信支付 1是可全部支付
+		var coins=1;//龙币数
+		var version=720;//版本
+		var isWx=1;//微信
+		var isIOS = 0; //1苹果 0 安卓
+		var ua = navigator.userAgent.toLowerCase();
+		if (ua.match(/iphone/i) == "iphone" || ua.match(/ipad/i) == "ipad") {
+		  isIOS = 1;
+		}
+		var isSales = 0;//优惠价
+		var conponReceive = $.parseJSON('[]');
+		var saleInfo = {
+		    salePrice: (parseInt(conponReceive.cut) / 100) + "元",
+		    endTime: getDate(conponReceive.et)
+		};
+		function getDate(timeCut) {
+		    var tm = timeCut * 1000;
+		    var date = new Date(tm);
+		    return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+		}
+		var payOpt = {
+	      curTitle: '小伴龙学堂',
+	      version:version,
+	      isWx: isWx,
+	      channelPay: channelPay,
+	      maxhwpay:maxhwpay,
+	      ApplePay: ApplePay,
+	      coins: coins,
+	      curDevice: isIOS,
+	      urltag:"appshopcart-v3-index-" + froms,
+	      Turl: 'appPay.html?index=0&',
+	      TiaoUrl: '',
+	      price: 200,
+	      payPrice:200,
+	      paytype: 'wx',
+	      bagId: '',
+	      isSales: isSales,
+	      saleInfo: saleInfo,
+		};
+		var opt = payOpt;
+		var xblPayMask=new payMask(opt);//支付插件
+		//去购买
+		$('.body').on('click','.buy_btn',function(){
+			xblPayMask.show(opt);
+	  });
+	</script>
+</html>

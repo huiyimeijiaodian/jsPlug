@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>H5图片压缩上传</title>
+<style>
+	html{width: 33px;}
+</style>
+</head>
+<body>
+<div> 单图：
+  <input type="file" accept="image/*" capture="camera" class="jsImg" />
+  <input type="hidden" id="hidpic"/>
+  <br>
+  多图：
+  <input type="file" accept="image/*" capture="camera" multiple="multiple"  class="jsImgs" />
+  <input type="hidden" id="hidpics"/>
+  <br>
+  <button id="upload" type="button">上传照片 </button>
+</div>
+<script src="js/jquery-3.2.1.js"></script>
+<script>
+
+$(function(){
+	$('#upload').on('click', function(){
+		console.log($('#hidpics').val());
+		$.post("u.php", { hidpic: $('#hidpic').val(),hidpics: $('#hidpics').val()  }, function(data){
+		 alert("Data Loaded: " + data);
+	   });
+	});
+	
+	//单图
+	$('.jsImg').on('change', function(e){
+		console.log(this.files[0]);
+		setFilesReader(this.files[0], 0);
+	});	
+	
+	//多图
+	$('.jsImgs').on('change', function(e){
+		console.log(this.files[0]);
+		for (var i = 0; i < this.files.length; i++) {
+			setFilesReader(this.files[i], 1);
+		}
+	});
+
+})
+
+function setFilesReader(file, ismul) {
+	var reader = new window.FileReader();
+	reader.onload = function(e) {
+		compress(this.result, fileSize, ismul);
+	}
+	reader.readAsDataURL(file);
+	//console.log(this.files[0]);
+	var fileSize = Math.round(file.size/1024/1024) 
+}
+
+//onchange="readMultiFiles(this.files)"
+function readMultiFiles(files) {
+	for (var i = 0; i < files.length; i++) {
+		setFilesReader(files[i]);
+	}
+}
+
+//res代表上传的图片，fileSize大小图片的大小
+function compress(res, fileSize, ismul) {
+    var img = new Image(), maxW = 640; //设置最大宽度
+
+    img.onload = function () {
+        var cvs = document.createElement('canvas'), ctx = cvs.getContext('2d');
+
+        if(img.width > maxW) {
+            img.height *= maxW / img.width;
+            img.width = maxW;
+        }
+
+        cvs.width = img.width;
+        cvs.height = img.height;
+
+        ctx.clearRect(0, 0, cvs.width, cvs.height);
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+
+        var compressRate = getCompressRate(1,fileSize);
+
+        var dataUrl = cvs.toDataURL('image/jpeg', compressRate);
+
+        //document.body.appendChild(cvs);
+        //console.log(ismul);
+		if (ismul == 0) {
+			$('#hidpic').val(dataUrl);
+		} else if (ismul == 1) {
+			$('#hidpics').val($('#hidpics').val()+'||'+dataUrl);
+		}
+    }
+    img.src = res;
+}
+
+//计算压缩比率，size单位为MB
+function getCompressRate(allowMaxSize,fileSize){
+	var compressRate = 1;
+		
+	if(fileSize/allowMaxSize > 4){
+	   compressRate = 0.5;
+	} else if(fileSize/allowMaxSize >3){
+	   compressRate = 0.6;
+	} else if(fileSize/allowMaxSize >2){
+	   compressRate = 0.7;
+	} else if(fileSize > allowMaxSize){
+	   compressRate = 0.8;
+	} else{
+	   compressRate = 0.9;
+	}
+	return compressRate;
+}
+
+</script>
+</body>
+</html>

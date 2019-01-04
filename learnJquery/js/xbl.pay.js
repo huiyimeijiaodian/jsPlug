@@ -2,7 +2,7 @@
     ;(function($, window, document,undefined){
         function payMask(opt){
             this.defaults={
-                curTitle: '小伴龙学堂',
+                curTitle: 'app支付',
                 price: 0,
                 payPrice: 0,
                 paytype: 'wx',
